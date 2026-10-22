@@ -1,6 +1,6 @@
 # Finanzas Web
 
-Frontend del sistema de finanzas personales, desarrollado con React y JavaScript. Permite registrarse, iniciar sesión y administrar egresos con filtros por año y mes, categorías, subcategorías y validaciones del backend.
+Frontend del sistema de finanzas personales, desarrollado con React y JavaScript. Permite registrarse, iniciar sesión y administrar ingresos y egresos con filtros por año y mes, categorías, subcategorías y validaciones del backend.
 
 Este repositorio contiene exclusivamente el frontend. El backend Laravel se administra en **otro repositorio**, con sus propios requisitos, instalación y README. No ejecutes Composer ni migraciones dentro de este proyecto.
 
@@ -84,7 +84,7 @@ Rutas disponibles:
 | `/login` | Público | Inicio de sesión |
 | `/registro` | Público | Registro |
 | `/` | Protegido | Pantalla inicial del dashboard |
-| `/ingresos` | Protegido | Pantalla base; gestión pendiente |
+| `/ingresos` | Protegido | Listado, filtros, creación, edición y eliminación |
 | `/egresos` | Protegido | Listado, filtros, creación, edición y eliminación |
 
 Registra una cuenta o inicia sesión con un usuario del backend configurado. Durante la recuperación de sesión se muestra un indicador de carga hasta validar el token con `/api/user`.
@@ -135,3 +135,6 @@ Publica el contenido de `dist/` en un alojamiento de archivos estáticos. Como s
 - **Cambiaste la URL y sigue usando la anterior:** reinicia Vite; si publicaste un build, vuelve a compilarlo y desplegarlo.
 - **401:** la sesión no es válida o expiró; inicia sesión de nuevo.
 - **422:** revisa los mensajes debajo de los campos; las reglas de validación pertenecen a Laravel.
+
+
+Las pruebas de frontend (`npm run test`) verifican creación y edición de ingresos, envío de egresos, errores 422 por campo, subcategorías dependientes, bloqueo durante envío y confirmación de eliminación con API simulada.

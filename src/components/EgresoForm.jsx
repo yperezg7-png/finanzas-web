@@ -69,20 +69,23 @@ export default function EgresoForm({ egreso = null, onSaved, onCancel, busy, onB
     onBusyChange(true)
     setErrors({})
     setMessage('')
+    let saved
     try {
       // Sin reglas duplicadas: Laravel devuelve 422 con errors por nombre de campo.
       // Conservar monto como cadena y normalizar los campos opcionales a null.
       const payload = { ...values, subcategoria_id: values.subcategoria_id || null, notas: values.notas || null }
-      const saved = egreso
+      saved = egreso
         ? await api.put(`/egresos/${egreso.id}`, payload)
         : await api.post('/egresos', payload)
-      onSaved(saved)
+    onSaved(saved)
     } catch (error) {
       setMessage(error.message)
       setErrors(error.status === 422 ? error.errors : {})
+      return
     } finally {
       onBusyChange(false)
     }
+      onSaved(saved)
   }
 
   return <form noValidate onSubmit={submit} className="space-y-4">
@@ -105,6 +108,6 @@ export default function EgresoForm({ egreso = null, onSaved, onCancel, busy, onB
     <div><label htmlFor={`${id}-monto`} className="text-sm font-medium">Monto (Q)</label><Input {...fieldProps('monto')} inputMode="decimal" placeholder="0.00" />{fieldErrors('monto')}</div>
     <div><label htmlFor={`${id}-notas`} className="text-sm font-medium">Notas (opcional)</label><textarea {...fieldProps('notas')} rows={3} className="block w-full rounded-md border bg-background p-3 text-sm" />{fieldErrors('notas')}</div>
     {message && <p role="alert" className="text-sm text-red-700">{message}</p>}
-    <div className="flex justify-end gap-2"><Button type="button" variant="outline" disabled={busy} onClick={onCancel}>Cancelar</Button><Button disabled={busy || loading || Boolean(loadError) || categories.length === 0}>{busy ? 'Guardando…' : egreso ? 'Guardar cambios' : 'Crear egreso'}</Button></div>
+    <div className="flex justify-end gap-2"><Button type="button" variant="outline" disabled={busy} onClick={onCancel}>Cancelar</Button><Button type="submit" disabled={busy || loading || Boolean(loadError) || categories.length === 0}>{busy ? 'Guardando…' : egreso ? 'Guardar cambios' : 'Crear egreso'}</Button></div>
   </form>
 }
